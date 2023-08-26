@@ -3,9 +3,13 @@ package com.images.iMages.Service;
 //import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Service
 public class FileStore {
@@ -16,7 +20,7 @@ public class FileStore {
         this.s3 = s3;
     }
 
-    public void putObject(String bucketName, String key, byte[] file) {
+    public void save(String bucketName, String key, byte[] file) {
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -26,7 +30,22 @@ public class FileStore {
 
     }
 
+    public ResponseBytes<GetObjectResponse> download(String bucketName, String key) {
+        GetObjectRequest objectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        return s3.getObjectAsBytes(objectRequest);
+    }
+
+
+
 }
+
+
+
+
 
 //    public void save(String path,
 //                     String fileName,

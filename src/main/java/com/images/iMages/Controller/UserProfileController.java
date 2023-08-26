@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.awt.*;
 import java.util.List;
@@ -38,4 +40,11 @@ public class UserProfileController {
                                        @RequestParam("file")MultipartFile file) {
         userProfileService.uploadUserProfileImage(userProfileId, file);
     }
+
+    @GetMapping("{userProfileId}/image/download")
+    public byte[] downloadUserProfileImage(@PathVariable("userProfileId") UUID userProfileId) {
+        return userProfileService.downloadUserProfileImage(userProfileId);
+    }
+
+
 }
